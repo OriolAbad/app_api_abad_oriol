@@ -25,7 +25,7 @@ class Character {
   final String name;
   final String house;
   final String imageUrl;
-  double score; // Agregamos el atributo score para la puntuación
+  double score; 
 
   Character({
     required this.name,
@@ -37,8 +37,8 @@ class Character {
   factory Character.fromJson(Map<String, dynamic> json) {
     return Character(
       name: json['name'],
-      house: json['house'] ?? 'Unknown',  // En caso de que 'house' sea nulo
-      imageUrl: json['image'] ?? '',  // Suponiendo que 'image' es el campo para la imagen del personaje
+      house: json['house'] ?? 'Unknown',  
+      imageUrl: json['image'] ?? '',  
     );
   }
 }
@@ -52,7 +52,7 @@ class CharacterListScreen extends StatefulWidget {
 
 class _CharacterListScreenState extends State<CharacterListScreen> {
   late Future<List<Character>> characters;
-  List<Character> characterList = [];  // Guardamos la lista de personajes en estado
+  List<Character> characterList = [];  
 
   Future<List<Character>> fetchCharacters() async {
     final response = await http.get(Uri.parse('https://hp-api.onrender.com/api/characters'));
@@ -65,28 +65,24 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
     }
   }
 
-  // Método para mostrar el diálogo con la imagen grande y la barra deslizante
   void _showCharacterDetails(BuildContext context, int index) {
-    final character = characterList[index];  // Obtener el personaje seleccionado
+    final character = characterList[index];  
     showDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder(  // Usamos StatefulBuilder para actualizar el Slider
+        return StatefulBuilder( 
           builder: (context, setState) {
             return AlertDialog(
               title: Text(character.name),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Mostrar la imagen en grande
                   character.imageUrl.isNotEmpty
                       ? Image.network(character.imageUrl)
                       : Icon(Icons.person, size: 100),
                   SizedBox(height: 10),
-                  // Mostrar la casa
                   Text('House: ${character.house}'),
                   SizedBox(height: 10),
-                  // Barra deslizante para cambiar la puntuación
                   Text('Rating: ${character.score.toStringAsFixed(1)} / 10'),
                   Slider(
                     value: character.score,
@@ -96,7 +92,7 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
                     label: character.score.toStringAsFixed(1),
                     onChanged: (newScore) {
                       setState(() {
-                        character.score = newScore;  // Actualiza la puntuación del personaje
+                        character.score = newScore; 
                       });
                     },
                   ),
@@ -106,7 +102,7 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      characterList[index] = character;  // Actualizar la lista de personajes con el nuevo valor
+                      characterList[index] = character; 
                     });
                     Navigator.of(context).pop();
                   },
@@ -142,12 +138,12 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No characters found.'));
           } else {
-            characterList = snapshot.data!;  // Guardamos los personajes en estado
+            characterList = snapshot.data!;  
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/background.jpg'),
-                  fit: BoxFit.cover, // Asegura que la imagen cubra toda la pantalla
+                  fit: BoxFit.cover, 
                 ),
               ),
               child: ListView.builder(
@@ -160,10 +156,10 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
                       contentPadding: EdgeInsets.all(10),
                       leading: character.imageUrl.isNotEmpty
                           ? Image.network(character.imageUrl, width: 50, height: 50)
-                          : Icon(Icons.person, size: 50), // Ícono de marcador si no hay imagen
+                          : Icon(Icons.person, size: 50), 
                       title: Text(character.name),
                       subtitle: Text('House: ${character.house}\nRating: ${character.score.toStringAsFixed(1)} / 10'),
-                      onTap: () => _showCharacterDetails(context, index), // Al hacer clic, se muestra el detalle
+                      onTap: () => _showCharacterDetails(context, index),
                     ),
                   );
                 },
